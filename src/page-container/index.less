@@ -1,0 +1,25 @@
+@import "../style/index.less";
+
+@page-container-prefix-cls: ~"@{antd-se-prefix}-page-container";
+
+.@{page-container-prefix-cls} {
+  width: 100%;
+  &-header {
+    background-color: #fff;
+    color: rgba(0, 0, 0, 0.85);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 32px;
+    padding: 12px 24px 16px 24px;
+    position: relative;
+    &-extra {
+      display: inline-block;
+      position: absolute;
+      right: 24px;
+    }
+  }
+  &-content {
+    margin: 24px 24px 0;
+    padding: 0;
+  }
+}
