@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { Spin } from "antd";
-import { getPrefixCls } from "@/utils";
+import { getPrefixCls } from "../utils";
 import "./index.less";
 
 export interface IPageContainer {

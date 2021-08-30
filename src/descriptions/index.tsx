@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import { Descriptions as AntdDescriptions, DescriptionsProps } from "antd";
 
-import { getPrefixCls } from "@/utils";
+import { getPrefixCls } from "../utils";
 
 import "./index.less";
 

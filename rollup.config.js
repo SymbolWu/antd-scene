@@ -7,18 +7,19 @@ import alias from "@rollup/plugin-alias";
 import { terser } from "rollup-plugin-terser";
 
 const path = require("path");
+const packageJson = require("./package.json");
 const projectRootDir = path.resolve(__dirname);
 
 export default {
   input: "src/index.ts",
   output: [
     {
-      file: "dist/index.js",
+      file: packageJson.main,
       format: "cjs",
       sourcemap: false,
     },
     {
-      file: "dist/index.esm.js",
+      file: packageJson.module,
       format: "esm",
       sourcemap: false,
     },

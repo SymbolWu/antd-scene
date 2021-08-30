@@ -7,6 +7,7 @@ export interface IFormItemProps extends FormItemProps {
   colProps?: ColProps;
   colSpan?: number;
   grid?: boolean;
+  // hardHidden?: boolean;
 }
 
 const FormItem: React.FC<IFormItemProps> = ({
@@ -14,6 +15,7 @@ const FormItem: React.FC<IFormItemProps> = ({
   component,
   colSpan,
   grid,
+  // hardHidden,
   ...restProps
 }) => {
   if (grid) {

@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, ModalProps, Form as AntdForm } from "antd";
 import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 
-import Form, { IFormProps } from "@/form";
+import Form, { IFormProps } from "../form";
 
 export interface IModalForm {
   modalProps: ModalProps;

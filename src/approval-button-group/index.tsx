@@ -8,7 +8,7 @@ import {
   Typography,
   Button,
 } from "antd";
-import ConfirmButton from "@/confirm-button";
+import ConfirmButton from "../confirm-button";
 
 interface IApprovalProps {
   confirmTitle?: string;

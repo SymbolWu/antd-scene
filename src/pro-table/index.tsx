@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useRef } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import {
   Form as AntdForm,
   Table,
@@ -7,13 +7,14 @@ import {
   TableProps,
   CardProps,
   SpaceProps,
+  TablePaginationConfig,
 } from "antd";
 import classNames from "classnames";
 
-import Form, { IFormProps } from "@/form";
-import { getPrefixCls, omitObject } from "@/utils";
+import Form, { IFormProps } from "../form";
+import { getPrefixCls, omitObject } from "../utils";
 
-import SearchOperations, { ISearchOperations } from "./SearchOperations";
+import { ISearchOperations } from "./SearchOperations";
 import { searchFormControl } from "./utils";
 import "./index.less";
 
@@ -25,6 +26,8 @@ export interface IProTable {
   tableCardProps?: CardProps;
   searchOperationsProps?: ISearchOperations;
   extra?: React.ReactNode;
+  getInitialParams?: (params: { [propsName: string]: any }) => void;
+  onChangeParams?: (params: { [propsName: string]: any }) => void;
 }
 
 const ProTable: React.FC<IProTable> = ({
@@ -35,6 +38,8 @@ const ProTable: React.FC<IProTable> = ({
   tableCardProps,
   searchOperationsProps,
   extra,
+  getInitialParams,
+  onChangeParams,
 }) => {
   // 属性中取值
   const formOptionsFormProps = formProps?.formOptions || [];
@@ -44,6 +49,10 @@ const ProTable: React.FC<IProTable> = ({
   // hooks
   const [expand, setExpand] = useState((formOptionsFormProps.length ?? 0) <= 3);
   const formValue = useRef({ ...formInitialValues });
+  const paginationValue = useRef<TablePaginationConfig>({
+    current: 1,
+    pageSize: 10,
+  });
   // 样式
   const prefixCls = getPrefixCls("pro-table");
   const spaceClassNames = classNames(
@@ -74,35 +83,42 @@ const ProTable: React.FC<IProTable> = ({
     //   getSearchValue({ ...initialValues });
   };
 
+  const onTableChange = ({ current, pageSize }: TablePaginationConfig) => {
+    paginationValue.current = { current, pageSize };
+    getAllValues();
+  };
+
   const onSearch = () => {
-    console.log("formValue.current:", formValue.current);
+    getAllValues();
+  };
+
+  const getAllValues = () => {
+    const params = {
+      ...paginationValue.current,
+      ...formValue.current,
+    };
+    if (typeof onChangeParams === "function") {
+      onChangeParams(params);
+    }
+    return params;
   };
 
   // 计算属性
-  const { formOptions } = searchFormControl({
+  const formOptions = searchFormControl({
     expand,
     formOptionsFormProps,
-    expandClassName: searchFormOperationExpandClassName,
-    operationItem: (span: number, expandHiddenClassName: string) => ({
-      colProps: {
-        className: searchFormOperationClassName,
-        span,
-      },
-      component: (
-        <SearchOperations
-          {...searchOperationsProps}
-          expandButtonProps={{
-            ...searchOperationsProps?.expandButtonProps,
-            className: expandHiddenClassName,
-          }}
-          expand={expand}
-          onExpand={onExpand}
-          onReset={onReset}
-          onSearch={onSearch}
-        />
-      ),
-    }),
+    searchFormOperationClassName,
+    searchFormOperationExpandClassName,
+    searchOperationsProps,
+    onExpand,
+    onReset,
+    onSearch,
   });
+
+  useEffect(() => {
+    const params = getAllValues();
+    getInitialParams && getInitialParams(params);
+  }, []);
 
   return (
     <Space direction="vertical" className={spaceClassNames} {...spaceProps}>
@@ -117,7 +133,7 @@ const ProTable: React.FC<IProTable> = ({
       </Card>
       <Fragment>{extra || null}</Fragment>
       <Card bordered size="small" {...tableCardProps}>
-        <Table {...tableProps} />
+        <Table {...tableProps} onChange={onTableChange} />
       </Card>
     </Space>
   );

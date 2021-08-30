@@ -1,8 +1,13 @@
 {
   "name": "antd-se",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "1.0.1",
+  "description": "Antd Business Components",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "storybook": "start-storybook -p 6006",
@@ -13,6 +18,10 @@
   ],
   "author": "Wu Xinbo",
   "license": "MIT",
+  "peerDependencies": {
+    "react": ">=17.0.1",
+    "antd": ">=4.0.0"
+  },
   "devDependencies": {
     "@ant-design/icons": "^4.6.4",
     "@babel/core": "^7.15.0",
