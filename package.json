@@ -1,6 +1,6 @@
 {
   "name": "antd-se",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Antd Business Components",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -9,7 +9,7 @@
   ],
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rm -rf dist && rollup -c",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },

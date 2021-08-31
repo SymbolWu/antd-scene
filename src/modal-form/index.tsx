@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, ModalProps, Form as AntdForm } from "antd";
+import { Modal, ModalProps } from "antd";
 import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 
 import Form, { IFormProps } from "../form";
@@ -61,5 +61,5 @@ const ModalForm: React.FC<IModalForm> = ({ modalProps, formProps, extra }) => {
     </Modal>
   );
 };
-export { AntdForm as Form };
+
 export default ModalForm;

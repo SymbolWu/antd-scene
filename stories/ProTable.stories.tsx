@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Input, Button } from "antd";
+import { Input, Button, Form } from "antd";
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Story, Meta } from "@storybook/react/types-6-0";
 
-import ProTable, { IProTable, Form } from "../src/pro-table";
+import ProTable, { IProTable } from "../src/pro-table";
 
 export default {
   title: "业务场景/ProTable 高级列表",
@@ -18,12 +18,25 @@ export const Template: Story<IProTable> = (args) => {
   const getProTableParams = (values) => {
     console.log(values);
   };
+  const onChangeParams = (values) => {
+    console.log("onChangeParams:", values);
+  };
+
+  const onTableChange = (pagination, filter, sorter) => {
+    console.log("pagination:", pagination);
+    console.log("filter:", filter);
+    console.log("sorter:", sorter);
+  };
+
+  const onFormParams = (values) => {
+    console.log("onFormParams:", values);
+  };
   return (
     <ProTable
       formProps={{
         form,
         colSpan: 8,
-        initialValues: { three: "333" },
+        initialValues: { email: "email" },
         formOptions: [
           {
             name: "email",
@@ -49,8 +62,11 @@ export const Template: Story<IProTable> = (args) => {
           { title: "地址", dataIndex: "address", key: "address" },
         ],
         rowKey: "name",
+        onChange: onTableChange,
       }}
       getInitialParams={getProTableParams}
+      onChangeParams={onChangeParams}
+      onChangeFormParams={onFormParams}
     />
   );
 };

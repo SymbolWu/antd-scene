@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useRef, useEffect } from "react";
 import {
-  Form as AntdForm,
   Table,
   Card,
   Space,
@@ -28,8 +27,10 @@ export interface IProTable {
   extra?: React.ReactNode;
   getInitialParams?: (params: { [propsName: string]: any }) => void;
   onChangeParams?: (params: { [propsName: string]: any }) => void;
+  onChangeFormParams?: (params: { [propsName: string]: any }) => void;
 }
 
+const defaultPagination = { pageNo: 1, pageSize: 10 };
 const ProTable: React.FC<IProTable> = ({
   spaceProps,
   formProps,
@@ -40,19 +41,18 @@ const ProTable: React.FC<IProTable> = ({
   extra,
   getInitialParams,
   onChangeParams,
+  onChangeFormParams,
 }) => {
   // 属性中取值
   const formOptionsFormProps = formProps?.formOptions || [];
   const formInitialValues = formProps?.initialValues || {};
   const form = formProps?.form;
   const formOnValuesChange = formProps?.onValuesChange;
+  const tableOnChange = tableProps?.onChange;
   // hooks
   const [expand, setExpand] = useState((formOptionsFormProps.length ?? 0) <= 3);
   const formValue = useRef({ ...formInitialValues });
-  const paginationValue = useRef<TablePaginationConfig>({
-    current: 1,
-    pageSize: 10,
-  });
+  const paginationValue = useRef<TablePaginationConfig>(defaultPagination);
   // 样式
   const prefixCls = getPrefixCls("pro-table");
   const spaceClassNames = classNames(
@@ -78,26 +78,29 @@ const ProTable: React.FC<IProTable> = ({
   };
   const onReset = () => {
     formValue.current = { ...formInitialValues };
+    paginationValue.current = defaultPagination;
     form?.resetFields();
-    // typeof getSearchValue === "function" &&
-    //   getSearchValue({ ...initialValues });
+    getAllParams(true);
   };
-
-  const onTableChange = ({ current, pageSize }: TablePaginationConfig) => {
-    paginationValue.current = { current, pageSize };
-    getAllValues();
-  };
-
   const onSearch = () => {
-    getAllValues();
+    paginationValue.current = defaultPagination;
+    onChangeFormParams && onChangeFormParams(formValue.current);
+    getAllParams(true);
   };
 
-  const getAllValues = () => {
+  function onTableChange(pagination: TablePaginationConfig, ...args: any[]) {
+    const { current, pageSize } = pagination;
+    paginationValue.current = { current, pageSize };
+    tableOnChange && tableOnChange(pagination, args[1], args[2], args[3]);
+    getAllParams(true);
+  }
+
+  const getAllParams = (exePropsFunction?: boolean) => {
     const params = {
       ...paginationValue.current,
       ...formValue.current,
     };
-    if (typeof onChangeParams === "function") {
+    if (typeof onChangeParams === "function" && exePropsFunction) {
       onChangeParams(params);
     }
     return params;
@@ -116,7 +119,7 @@ const ProTable: React.FC<IProTable> = ({
   });
 
   useEffect(() => {
-    const params = getAllValues();
+    const params = getAllParams(false);
     getInitialParams && getInitialParams(params);
   }, []);
 
@@ -138,5 +141,4 @@ const ProTable: React.FC<IProTable> = ({
     </Space>
   );
 };
-export { AntdForm as Form };
 export default ProTable;

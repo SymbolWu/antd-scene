@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Input, Button } from "antd";
+import { Input, Button, Form } from "antd";
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Story, Meta } from "@storybook/react/types-6-0";
 
-import ModalForm, { IModalForm, Form } from "../src/modal-form";
+import ModalForm, { IModalForm } from "../src/modal-form";
 
 export default {
   title: "数据录入/ModalForm 模态框表单",
