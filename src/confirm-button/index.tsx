@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from 'react';
 import { Button, Popconfirm, PopconfirmProps, ButtonProps } from "antd";
 
 export interface IConfirmButton {
@@ -19,7 +19,6 @@ const ConfirmButton: React.FC<IConfirmButton> = ({
     onConfirm,
     ...restPopconfirmProps
   } = popconfirmProps || {};
-  const { size = "small", ...restButtonProps } = buttonProps || {};
   const onClickConfirm = () => {
     typeof onConfirm === "function" && onConfirm();
   };
@@ -35,7 +34,7 @@ const ConfirmButton: React.FC<IConfirmButton> = ({
         cancelText={cancelText}
         {...restPopconfirmProps}
       >
-        <Button size={size} {...restButtonProps}>
+        <Button size="small" type="link" {...(buttonProps || {})}>
           {children}
         </Button>
       </Popconfirm>

@@ -16,15 +16,15 @@ export default {
     {
       file: packageJson.main,
       format: "cjs",
-      sourcemap: false,
+      sourcemap: true,
     },
-    {
-      file: packageJson.module,
-      format: "esm",
-      sourcemap: false,
-    },
+    // {
+    //   file: packageJson.module,
+    //   format: "es",
+    //   sourcemap: true,
+    // },
   ],
-  external: ["react", "antd"],
+  external: ["react", "antd", "@ant-design/icons"],
   plugins: [
     alias({
       entries: [

@@ -10,9 +10,21 @@ export default {
   argTypes: {},
 } as Meta;
 
-const Template: Story<IConfirmButton> = (args) => (
-  <ConfirmButton {...args}>删除</ConfirmButton>
-);
+const Template: Story<IConfirmButton> = (args) => {
+  const onConfirmFreezeUser = (value) => {
+    console.log(value);
+  };
+  return (
+    <ConfirmButton
+      popconfirmProps={{
+        title: `确定要删除此用户?`,
+        onConfirm: () => onConfirmFreezeUser(123),
+      }}
+    >
+      删除
+    </ConfirmButton>
+  );
+};
 
 export const Primary = Template.bind({});
 Primary.args = {};
