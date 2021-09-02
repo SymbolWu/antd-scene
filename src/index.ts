@@ -5,6 +5,7 @@ import Form from "./form";
 import KeyValueText from "./key-value-text";
 import ModalForm from "./modal-form";
 import PageContainer from "./page-container";
+import ProTable from "./pro-table";
 import { Form as AntdForm } from "antd";
 
 export {
@@ -15,5 +16,6 @@ export {
   KeyValueText,
   ModalForm,
   PageContainer,
+  ProTable,
   AntdForm,
 };

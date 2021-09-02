@@ -30,7 +30,7 @@ export interface IProTable {
   onChangeFormParams?: (params: { [propsName: string]: any }) => void;
 }
 
-const defaultPagination = { pageNo: 1, pageSize: 10 };
+const defaultPagination = { current: 1, pageSize: 10 };
 const ProTable: React.FC<IProTable> = ({
   spaceProps,
   formProps,
@@ -124,8 +124,17 @@ const ProTable: React.FC<IProTable> = ({
   }, []);
 
   return (
-    <Space direction="vertical" className={spaceClassNames} {...spaceProps}>
-      <Card bordered={false} {...formCardProps}>
+    <Space
+      direction="vertical"
+      size={24}
+      className={spaceClassNames}
+      {...spaceProps}
+    >
+      <Card
+        bordered={false}
+        bodyStyle={{ paddingBottom: 0, ...formCardProps?.bodyStyle }}
+        {...formCardProps}
+      >
         <Form
           grid
           rowProps={{ gutter: 24 }}
@@ -136,7 +145,7 @@ const ProTable: React.FC<IProTable> = ({
       </Card>
       <Fragment>{extra || null}</Fragment>
       <Card bordered size="small" {...tableCardProps}>
-        <Table {...tableProps} onChange={onTableChange} />
+        <Table size="small" {...tableProps} onChange={onTableChange} />
       </Card>
     </Space>
   );
