@@ -1,3 +1,3 @@
-# ANTD 扩展组件库
+# ANTD Extended component library
 
-基于Antd 对一些常见的业务场景进行相关的组件封装、优化
+Based on Antd, encapsulate and optimize related components for some common business scenarios

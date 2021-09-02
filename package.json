@@ -1,6 +1,6 @@
 {
   "name": "antd-scene",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Antd Business Components",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -10,13 +10,23 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist && rollup -c",
-    "pub":"yarn build && npm publish",
+    "pub": "yarn build && npm publish",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
   "keywords": [
-    "antd"
+    "antd",
+    "react",
+    "business"
   ],
+  "homepage": "https://github.com/SymbolWu/antd-scene",
+  "bugs": {
+    "url": "https://github.com/SymbolWu/antd-scene/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SymbolWu/antd-scene"
+  },
   "author": "Wu Xinbo",
   "license": "MIT",
   "peerDependencies": {
