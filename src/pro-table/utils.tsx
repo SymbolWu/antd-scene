@@ -21,6 +21,7 @@ export const searchFormControl = ({
   const formOptions: IFormItemProps[] = [
     ...inputFormOptions,
     {
+      wrapperCol: { span: 24 },
       colProps: {
         className: searchFormOperationClassName,
         span: operationSpan,

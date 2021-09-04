@@ -6,11 +6,13 @@ import KeyValueText from "./key-value-text";
 import ModalForm from "./modal-form";
 import PageContainer from "./page-container";
 import ProTable from "./pro-table";
+import ConfigProvider from "./config-provider";
 import { Form as AntdForm } from "antd";
 
 export {
   ApprovalButtonGroup,
   ConfirmButton,
+  ConfigProvider,
   Descriptions,
   Form,
   KeyValueText,
