@@ -12,6 +12,7 @@ import classNames from "classnames";
 
 import Form, { IFormProps } from "../form";
 import { getPrefixCls, omitObject } from "../utils";
+import { useConfig } from "../config-provider";
 
 import { ISearchOperations } from "./SearchOperations";
 import { searchFormControl } from "./utils";
@@ -43,6 +44,17 @@ const ProTable: React.FC<IProTable> = ({
   onChangeParams,
   onChangeFormParams,
 }) => {
+  // 配置中取值
+  const { proTable } = useConfig();
+
+  const spaceSize = proTable?.spaceSize ?? 24;
+  const formCardSize = proTable?.formCardSize || "default";
+  const tableCardSize = proTable?.tableCardSize || "default";
+  const formCardBodyStyle = proTable?.formCardBodyStyle || {};
+  const formCardHeadStyle = proTable?.formCardHeadStyle || {};
+  const tableCardBodyStyle = proTable?.tableCardBodyStyle || {};
+  const tableCardHeadStyle = proTable?.tableCardHeadStyle || {};
+  const tableSize = proTable?.tableSize || "large";
   // 属性中取值
   const formOptionsFormProps = formProps?.formOptions || [];
   const formInitialValues = formProps?.initialValues || {};
@@ -126,13 +138,21 @@ const ProTable: React.FC<IProTable> = ({
   return (
     <Space
       direction="vertical"
-      size={24}
+      size={spaceSize}
       className={spaceClassNames}
       {...spaceProps}
     >
       <Card
         bordered={false}
-        bodyStyle={{ paddingBottom: 0, ...formCardProps?.bodyStyle }}
+        bodyStyle={{
+          paddingBottom: 0,
+          ...formCardBodyStyle,
+          ...(formCardProps?.bodyStyle || {}),
+        }}
+        headStyle={{
+          ...formCardHeadStyle,
+        }}
+        size={formCardSize}
         {...formCardProps}
       >
         <Form
@@ -144,8 +164,20 @@ const ProTable: React.FC<IProTable> = ({
         />
       </Card>
       <Fragment>{extra || null}</Fragment>
-      <Card bordered size="small" {...tableCardProps}>
-        <Table size="small" {...tableProps} onChange={onTableChange} />
+      <Card
+        bordered
+        size={tableCardSize}
+        bodyStyle={{
+          ...tableCardBodyStyle,
+          ...(tableCardProps?.bodyStyle || {}),
+        }}
+        headStyle={{
+          ...tableCardHeadStyle,
+          ...(tableCardProps?.headStyle || {}),
+        }}
+        {...tableCardProps}
+      >
+        <Table size={tableSize} {...tableProps} onChange={onTableChange} />
       </Card>
     </Space>
   );

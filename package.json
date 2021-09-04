@@ -1,6 +1,6 @@
 {
   "name": "antd-scene",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "description": "Antd Business Components",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

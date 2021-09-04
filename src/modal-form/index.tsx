@@ -5,13 +5,13 @@ import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 import Form, { IFormProps } from "../form";
 
 export interface IModalForm {
-  modalProps: ModalProps;
-  formProps: IFormProps;
+  modalProps?: ModalProps;
+  formProps?: IFormProps;
   extra?: React.ReactNode | null;
 }
 
 const ModalForm: React.FC<IModalForm> = ({ modalProps, formProps, extra }) => {
-  const { form, onFinishFailed, ...restFormProps } = formProps;
+  const { form, onFinishFailed, ...restFormProps } = formProps || {};
   const {
     onOk,
     onCancel,
@@ -23,7 +23,7 @@ const ModalForm: React.FC<IModalForm> = ({ modalProps, formProps, extra }) => {
       icon: <CloseOutlined />,
     },
     ...restModalProps
-  } = modalProps;
+  } = modalProps || {};
   const onClickModalOk = () => {
     if (form) {
       form

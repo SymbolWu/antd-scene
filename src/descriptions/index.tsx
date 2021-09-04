@@ -19,7 +19,7 @@ export interface DescriptionsItemProps {
 }
 
 export interface IDescriptions extends DescriptionsProps {
-  options: DescriptionsItemProps[];
+  options?: DescriptionsItemProps[];
 }
 
 const { Item } = AntdDescriptions;
@@ -41,11 +41,13 @@ const Descriptions: React.FC<IDescriptions> = ({
       {...restDescriptionsProps}
       className={descriptionsClassNames}
     >
-      {options.map((i, index) => (
-        <Item {...i} span={i.span || 1} key={index}>
-          {i.render ? i.render() : i?.value}
-        </Item>
-      ))}
+      {options?.length
+        ? options.map((i, index) => (
+            <Item {...i} span={i.span || 1} key={index}>
+              {i.render ? i.render() : i?.value}
+            </Item>
+          ))
+        : null}
     </AntdDescriptions>
   );
 };
