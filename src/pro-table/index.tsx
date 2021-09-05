@@ -22,7 +22,7 @@ import { getPrefixCls, omitObject } from "../utils";
 import { useConfig } from "../config-provider";
 
 import { ISearchOperations } from "./SearchOperations";
-import { searchFormControl } from "./utils";
+import { searchFormControl, paramsNormalize } from "./utils";
 import "./index.less";
 
 export interface IProTable {
@@ -65,6 +65,7 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
   const tableCardBodyStyle = proTable?.tableCardBodyStyle || {};
   const tableCardHeadStyle = proTable?.tableCardHeadStyle || {};
   const tableSize = proTable?.tableSize || "large";
+  const paramsNormalizeMap = proTable?.paramsNormalizeMap || {};
   // 属性中取值
   const formOptionsFormProps = formProps?.formOptions || [];
   const formInitialValues = formProps?.initialValues || {};
@@ -119,10 +120,13 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
     tableOnChange && tableOnChange(pagination, args[1], args[2], args[3]);
     getOnChangeParams();
   }
-  const getParams = () => ({
-    ...paginationValue.current,
-    ...formValue.current,
-  });
+  const getParams = () => {
+    const originParams = {
+      ...paginationValue.current,
+      ...formValue.current,
+    };
+    return paramsNormalize(originParams, paramsNormalizeMap);
+  };
   const getOnChangeParams = () => {
     const params = getParams();
     if (typeof onChangeParams === "function") {
@@ -204,4 +208,3 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
 // export default RefProTable;
 
 export default forwardRef(ProTable);
-

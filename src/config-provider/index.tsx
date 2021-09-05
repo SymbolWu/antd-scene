@@ -14,6 +14,7 @@ export interface IConfigProviderProps {
     tableCardBodyStyle?: React.CSSProperties;
     tableCardHeadStyle?: React.CSSProperties;
     tableSize?: SizeType;
+    paramsNormalizeMap?: { [x: string]: string };
   };
 }
 

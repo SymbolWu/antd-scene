@@ -39,6 +39,7 @@ const Template: Story<IConfigProviderProps> = (args) => {
       proTable={{
         tableCardBodyStyle: bodyStyle,
         tableCardHeadStyle: headStyle,
+        paramsNormalizeMap: { current: "pageNo" },
       }}
     >
       <ProTable

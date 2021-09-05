@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import has from "has";
 import { IFormItemProps } from "../form/FormItem";
 
 import SearchOperations from "./SearchOperations";
@@ -45,4 +46,12 @@ export const searchFormControl = ({
     },
   ];
   return formOptions;
+};
+
+export const paramsNormalize = (params: any, map: any) => {
+  return Object.keys(params).reduce((finalParams: any, currentKey: string) => {
+    const key = has(map, currentKey) ? map[currentKey] : currentKey;
+    finalParams[key] = params[currentKey];
+    return finalParams;
+  }, {});
 };
