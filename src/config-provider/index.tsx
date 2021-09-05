@@ -6,7 +6,7 @@ import { SizeType } from "antd/es/config-provider/SizeContext";
 
 export interface IConfigProviderProps {
   proTable?: {
-    spaceSize?: SpaceSize;
+    gap?: SpaceSize;
     formCardSize?: CardSize;
     tableCardSize?: CardSize;
     formCardBodyStyle?: React.CSSProperties;

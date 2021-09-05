@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Input, Button, Form } from "antd";
+import { Input, Button, Form, Card } from "antd";
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Story, Meta } from "@storybook/react/types-6-0";
 
@@ -65,6 +65,7 @@ export const Template: Story<IProTable> = (args) => {
           },
         ],
       }}
+      extra={<Card>KKK</Card>}
       tableCardProps={{
         title: "某某列表",
         extra: <Button onClick={onRefresh}>Refresh</Button>,

@@ -9,10 +9,8 @@ import React, {
 import {
   Table,
   Card,
-  Space,
   TableProps,
   CardProps,
-  SpaceProps,
   TablePaginationConfig,
 } from "antd";
 import classNames from "classnames";
@@ -26,13 +24,15 @@ import { searchFormControl, paramsNormalize } from "./utils";
 import "./index.less";
 
 export interface IProTable {
-  spaceProps?: SpaceProps;
+  gap?: number | string;
   formProps?: IFormProps;
   tableProps?: TableProps<any>;
   formCardProps?: CardProps;
   tableCardProps?: CardProps;
   searchOperationsProps?: ISearchOperations;
   extra?: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
   getInitialParams?: (params: { [propsName: string]: any }) => void;
   onChangeParams?: (params: { [propsName: string]: any }) => void;
   onChangeFormParams?: (params: { [propsName: string]: any }) => void;
@@ -41,13 +41,15 @@ export interface IProTable {
 const defaultPagination = { current: 1, pageSize: 10 };
 const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
   {
-    spaceProps,
+    gap,
     formProps,
     formCardProps,
     tableProps,
     tableCardProps,
     searchOperationsProps,
     extra,
+    className,
+    style,
     getInitialParams,
     onChangeParams,
     onChangeFormParams,
@@ -57,7 +59,7 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
   // 配置中取值
   const { proTable } = useConfig();
 
-  const spaceSize = proTable?.spaceSize ?? 24;
+  const containerGap = gap ?? proTable?.gap ?? 24;
   const formCardSize = proTable?.formCardSize || "default";
   const tableCardSize = proTable?.tableCardSize || "default";
   const formCardBodyStyle = proTable?.formCardBodyStyle || {};
@@ -81,10 +83,7 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
   }));
   // 样式
   const prefixCls = getPrefixCls("pro-table");
-  const spaceClassNames = classNames(
-    `${prefixCls}-space`,
-    spaceProps?.className || ""
-  );
+  const containerClassName = classNames(`${prefixCls}-container`, className);
   const searchFormOperationClassName = classNames(
     `${prefixCls}-search-form-operation`,
     searchOperationsProps?.colProps?.className || ""
@@ -152,33 +151,36 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
   }, []);
 
   return (
-    <Space
-      direction="vertical"
-      size={spaceSize}
-      className={spaceClassNames}
-      {...spaceProps}
+    <div
+      className={containerClassName}
+      style={{
+        gap: containerGap,
+        ...style,
+      }}
     >
-      <Card
-        bordered={false}
-        bodyStyle={{
-          paddingBottom: 0,
-          ...formCardBodyStyle,
-          ...(formCardProps?.bodyStyle || {}),
-        }}
-        headStyle={{
-          ...formCardHeadStyle,
-        }}
-        size={formCardSize}
-        {...formCardProps}
-      >
-        <Form
-          grid
-          rowProps={{ gutter: 24 }}
-          {...formProps}
-          onValuesChange={onValuesChange}
-          formOptions={formOptions}
-        />
-      </Card>
+      {formOptionsFormProps.length ? (
+        <Card
+          bordered={false}
+          bodyStyle={{
+            paddingBottom: 0,
+            ...formCardBodyStyle,
+            ...(formCardProps?.bodyStyle || {}),
+          }}
+          headStyle={{
+            ...formCardHeadStyle,
+          }}
+          size={formCardSize}
+          {...formCardProps}
+        >
+          <Form
+            grid
+            rowProps={{ gutter: 24 }}
+            {...formProps}
+            onValuesChange={onValuesChange}
+            formOptions={formOptions}
+          />
+        </Card>
+      ) : null}
       <Fragment>{extra || null}</Fragment>
       <Card
         bordered
@@ -195,7 +197,7 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
       >
         <Table size={tableSize} {...tableProps} onChange={onTableChange} />
       </Card>
-    </Space>
+    </div>
   );
 };
 // const InternalProTable = forwardRef(ProTable);

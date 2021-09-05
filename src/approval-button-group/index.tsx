@@ -79,12 +79,12 @@ const ApprovalButtonGroup: React.FC<IApprovalButtonGroup> = ({
 
   const options = [
     {
-      type: approve,
+      type: reject,
       ...defaultRejectConfig,
       ...rejectConfig,
     },
     {
-      type: reject,
+      type: approve,
       ...defaultApproveConfig,
       ...approveConfig,
     },
@@ -102,7 +102,7 @@ const ApprovalButtonGroup: React.FC<IApprovalButtonGroup> = ({
   }
   return (
     <Space {...defaultSpaceProps} {...spaceProps}>
-      {options.map((option) => {
+      {options.map((option, index) => {
         const {
           confirmTitle,
           type,
@@ -112,13 +112,18 @@ const ApprovalButtonGroup: React.FC<IApprovalButtonGroup> = ({
         } = option;
         if (!needConfirm) {
           return (
-            <Button {...buttonProps} onClick={() => onConfirm(type)}>
+            <Button
+              key={index}
+              {...buttonProps}
+              onClick={() => onConfirm(type)}
+            >
               {buttonText}
             </Button>
           );
         }
         return (
           <ConfirmButton
+            key={index}
             popconfirmProps={{
               ...popconfirmProps,
               title: confirmTitle,
