@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { Input, Button, Form } from "antd";
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Story, Meta } from "@storybook/react/types-6-0";
@@ -11,10 +11,19 @@ export default {
   argTypes: {},
 } as Meta;
 
+const data = () => {
+  const f = (length) => Array.from({ length }).map((v, i) => i);
+  return f(20).map((i) => ({ name: i, age: i * 10, address: "dd" }));
+};
 export const Template: Story<IProTable> = (args) => {
   const [form] = Form.useForm();
-  const f = (length) => Array.from({ length }).map((v, i) => i);
-  const data = f(20).map((i) => ({ name: i, age: i * 10, address: "dd" }));
+  const proTableRef = useRef<any>({});
+
+  // const getInstance = (instance: any) => {
+  //   console.log('instance:',instance)
+  //   proTableRef.current = { ...proTableRef, ...instance };
+  // };
+
   const getProTableParams = (values) => {
     console.log(values);
   };
@@ -31,8 +40,14 @@ export const Template: Story<IProTable> = (args) => {
   const onFormParams = (values) => {
     console.log("onFormParams:", values);
   };
+
+  const onRefresh = () => {
+    console.log("proTableRef:", proTableRef);
+  };
+
   return (
     <ProTable
+      ref={proTableRef}
       formProps={{
         form,
         colSpan: 8,
@@ -52,10 +67,11 @@ export const Template: Story<IProTable> = (args) => {
       }}
       tableCardProps={{
         title: "某某列表",
+        extra: <Button onClick={onRefresh}>Refresh</Button>,
       }}
       tableProps={{
         size: "small",
-        dataSource: data,
+        dataSource: data(),
         columns: [
           { title: "姓名", dataIndex: "name", key: "name" },
           { title: "年龄", dataIndex: "age", key: "age" },

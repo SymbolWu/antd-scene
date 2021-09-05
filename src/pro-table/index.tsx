@@ -1,4 +1,11 @@
-import React, { Fragment, useState, useRef, useEffect } from "react";
+import React, {
+  Fragment,
+  useState,
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 import {
   Table,
   Card,
@@ -32,18 +39,21 @@ export interface IProTable {
 }
 
 const defaultPagination = { current: 1, pageSize: 10 };
-const ProTable: React.FC<IProTable> = ({
-  spaceProps,
-  formProps,
-  formCardProps,
-  tableProps,
-  tableCardProps,
-  searchOperationsProps,
-  extra,
-  getInitialParams,
-  onChangeParams,
-  onChangeFormParams,
-}) => {
+const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
+  {
+    spaceProps,
+    formProps,
+    formCardProps,
+    tableProps,
+    tableCardProps,
+    searchOperationsProps,
+    extra,
+    getInitialParams,
+    onChangeParams,
+    onChangeFormParams,
+  },
+  ref
+) => {
   // 配置中取值
   const { proTable } = useConfig();
 
@@ -65,6 +75,9 @@ const ProTable: React.FC<IProTable> = ({
   const [expand, setExpand] = useState((formOptionsFormProps.length ?? 0) <= 3);
   const formValue = useRef({ ...formInitialValues });
   const paginationValue = useRef<TablePaginationConfig>(defaultPagination);
+  useImperativeHandle(ref, () => ({
+    getParams,
+  }));
   // 样式
   const prefixCls = getPrefixCls("pro-table");
   const spaceClassNames = classNames(
@@ -92,30 +105,29 @@ const ProTable: React.FC<IProTable> = ({
     formValue.current = { ...formInitialValues };
     paginationValue.current = defaultPagination;
     form?.resetFields();
-    getAllParams(true);
+    getOnChangeParams();
   };
   const onSearch = () => {
     paginationValue.current = defaultPagination;
     onChangeFormParams && onChangeFormParams(formValue.current);
-    getAllParams(true);
+    getOnChangeParams();
   };
 
   function onTableChange(pagination: TablePaginationConfig, ...args: any[]) {
     const { current, pageSize } = pagination;
     paginationValue.current = { current, pageSize };
     tableOnChange && tableOnChange(pagination, args[1], args[2], args[3]);
-    getAllParams(true);
+    getOnChangeParams();
   }
-
-  const getAllParams = (exePropsFunction?: boolean) => {
-    const params = {
-      ...paginationValue.current,
-      ...formValue.current,
-    };
-    if (typeof onChangeParams === "function" && exePropsFunction) {
+  const getParams = () => ({
+    ...paginationValue.current,
+    ...formValue.current,
+  });
+  const getOnChangeParams = () => {
+    const params = getParams();
+    if (typeof onChangeParams === "function") {
       onChangeParams(params);
     }
-    return params;
   };
 
   // 计算属性
@@ -131,7 +143,7 @@ const ProTable: React.FC<IProTable> = ({
   });
 
   useEffect(() => {
-    const params = getAllParams(false);
+    const params = getParams();
     getInitialParams && getInitialParams(params);
   }, []);
 
@@ -182,4 +194,14 @@ const ProTable: React.FC<IProTable> = ({
     </Space>
   );
 };
-export default ProTable;
+// const InternalProTable = forwardRef(ProTable);
+// type InternalProTable = typeof InternalProTable;
+// interface RefProTableProps extends InternalProTable {
+//   useProTable: typeof useProTable;
+// }
+// const RefProTable: RefProTableProps = InternalProTable as RefProTableProps;
+// RefProTable.useProTable = useProTable;
+// export default RefProTable;
+
+export default forwardRef(ProTable);
+
