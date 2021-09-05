@@ -16,20 +16,26 @@ export interface IConfigProviderProps {
     tableSize?: SizeType;
     paramsNormalizeMap?: { [x: string]: string };
   };
+  modalForm?: {
+    closeIcon?: React.ReactNode;
+  };
 }
 
 const defaultValue: IConfigProviderProps = {
   proTable: {},
+  modalForm: {},
 };
 const Context = createContext<IConfigProviderProps>(defaultValue);
 
 const ConfigProvider: React.FC<IConfigProviderProps> = ({
   children,
   proTable,
+  modalForm,
 }) => {
   const value = {
     ...defaultValue,
     proTable,
+    modalForm,
   };
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };

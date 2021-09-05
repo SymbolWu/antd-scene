@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { Input, Button, Form } from "antd";
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Story, Meta } from "@storybook/react/types-6-0";
+import { CheckOutlined } from "@ant-design/icons";
 
 import ModalForm, { IModalForm } from "../src/modal-form";
+import ConfigProvider, { IConfigProviderProps } from "../src/config-provider";
 
 export default {
   title: "数据录入/ModalForm 模态框表单",
@@ -14,9 +16,15 @@ export default {
 export const Template: Story<IModalForm> = (args) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const onOk = (value) => {
     console.log("value:", value);
     console.log("form:", form);
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setVisible(false);
+      setConfirmLoading(false);
+    }, 1000);
   };
   const onOpen = () => {
     setVisible(true);
@@ -26,7 +34,7 @@ export const Template: Story<IModalForm> = (args) => {
   };
 
   return (
-    <>
+    <ConfigProvider modalForm={{ closeIcon: <CheckOutlined /> }}>
       <Button onClick={onOpen}>Open</Button>
       <ModalForm
         {...args}
@@ -48,10 +56,17 @@ export const Template: Story<IModalForm> = (args) => {
             },
           ],
         }}
-        modalProps={{ onOk, onCancel: onClose, visible, title: "测试标题" }}
+        modalProps={{
+          onOk,
+          onCancel: onClose,
+          visible,
+          title: "测试标题",
+          // titleIcon:<CheckOutlined/>,
+          confirmLoading,
+        }}
         extra={<div>Extra</div>}
       />
-    </>
+    </ConfigProvider>
   );
 };
 

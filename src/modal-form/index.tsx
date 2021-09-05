@@ -1,27 +1,37 @@
-import React from "react";
-import { Modal, ModalProps } from "antd";
+import React, { useEffect } from "react";
+import { Modal, ModalProps, Space, SpaceProps } from "antd";
 import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 
 import Form, { IFormProps } from "../form";
+import { useConfig } from "../config-provider";
 
+interface IModalProps extends ModalProps {
+  titleIcon?: React.ReactNode;
+  titleSpaceProps?: SpaceProps;
+}
 export interface IModalForm {
-  modalProps?: ModalProps;
+  modalProps?: IModalProps;
   formProps?: IFormProps;
   extra?: React.ReactNode | null;
 }
 
 const ModalForm: React.FC<IModalForm> = ({ modalProps, formProps, extra }) => {
+  const { modalForm } = useConfig();
+  const closeIcon = modalForm?.closeIcon || null;
   const { form, onFinishFailed, ...restFormProps } = formProps || {};
   const {
     onOk,
     onCancel,
     visible,
+    title,
+    titleIcon = null,
     okText = "提交",
     cancelText = "取消",
     okButtonProps = { icon: <CheckOutlined /> },
     cancelButtonProps = {
       icon: <CloseOutlined />,
     },
+    titleSpaceProps,
     ...restModalProps
   } = modalProps || {};
   const onClickModalOk = () => {
@@ -45,6 +55,25 @@ const ModalForm: React.FC<IModalForm> = ({ modalProps, formProps, extra }) => {
     }
   };
 
+  useEffect(() => {
+    if (!visible) {
+      form?.resetFields();
+    }
+  }, [visible]);
+
+  const renderTitle = () => {
+    return (
+      <Space size={titleIcon ? 8 : 0} {...titleSpaceProps}>
+        <span>{titleIcon}</span>
+        <span>{title || ""}</span>
+      </Space>
+    );
+  };
+
+  const renderCloseIcon = () => {
+    return closeIcon || <CloseOutlined />;
+  };
+
   return (
     <Modal
       visible={visible}
@@ -54,6 +83,8 @@ const ModalForm: React.FC<IModalForm> = ({ modalProps, formProps, extra }) => {
       cancelText={cancelText}
       okButtonProps={okButtonProps}
       cancelButtonProps={cancelButtonProps}
+      title={renderTitle()}
+      closeIcon={renderCloseIcon()}
       {...restModalProps}
     >
       <Form form={form} onFinishFailed={onFinishFailed} {...restFormProps} />
