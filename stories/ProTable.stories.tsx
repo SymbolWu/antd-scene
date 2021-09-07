@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Input, Button, Form, Card } from "antd";
+import { Input, Button, Form, Card, List } from "antd";
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Story, Meta } from "@storybook/react/types-6-0";
 
@@ -65,7 +65,31 @@ export const Template: Story<IProTable> = (args) => {
           },
         ],
       }}
-      extra={<Card>KKK</Card>}
+      // extra={<Card>KKK</Card>}
+
+      // tableLeftColSpan={17}
+      // tableRightColSpan={7}
+      // tableRowGutter={8}
+      contentGrid={{
+        tableColSpan: 17,
+        rightColSpan: 7,
+        rowGutter: 8,
+        rightExtra: (
+          <List
+            header={<div>Header</div>}
+            footer={<div>Footer</div>}
+            bordered
+            dataSource={[
+              "Racing car sprays burning fuel into crowd.",
+              "Japanese princess to wed commoner.",
+              "Australian walks 100km after outback crash.",
+              "Man charged over missing wedding girl.",
+              "Los Angeles battles huge wildfires.",
+            ]}
+            renderItem={(item) => <List.Item>{item}</List.Item>}
+          />
+        ),
+      }}
       tableCardProps={{
         title: "某某列表",
         extra: <Button onClick={onRefresh}>Refresh</Button>,

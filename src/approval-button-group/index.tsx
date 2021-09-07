@@ -57,7 +57,6 @@ const defaultRejectConfig: IApprovalProps = {
 };
 const defaultSpaceProps: SpaceProps = {
   size: "small",
-  split: <Divider type="vertical" />,
 };
 const ApprovalButtonGroup: React.FC<IApprovalButtonGroup> = ({
   popconfirmProps = {},

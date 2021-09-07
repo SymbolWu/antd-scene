@@ -12,6 +12,10 @@ import {
   TableProps,
   CardProps,
   TablePaginationConfig,
+  Row,
+  Col,
+  RowProps,
+  ColProps,
 } from "antd";
 import classNames from "classnames";
 
@@ -33,6 +37,21 @@ export interface IProTable {
   extra?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  contentGrid?: {
+    rowGutter?: RowProps["gutter"];
+    rowProps?: RowProps;
+
+    leftExtra?: React.ReactNode;
+    leftColSpan?: ColProps["span"];
+    leftColProps?: ColProps;
+
+    tableColSpan?: ColProps["span"];
+    tableColProps?: ColProps;
+
+    rightExtra?: React.ReactNode;
+    rightColSpan?: ColProps["span"];
+    rightColProps?: ColProps;
+  };
   getInitialParams?: (params: { [propsName: string]: any }) => void;
   onChangeParams?: (params: { [propsName: string]: any }) => void;
   onChangeFormParams?: (params: { [propsName: string]: any }) => void;
@@ -50,6 +69,7 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
     extra,
     className,
     style,
+    contentGrid,
     getInitialParams,
     onChangeParams,
     onChangeFormParams,
@@ -74,6 +94,21 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
   const form = formProps?.form;
   const formOnValuesChange = formProps?.onValuesChange;
   const tableOnChange = tableProps?.onChange;
+  const {
+    rowGutter = 24,
+    rowProps = {},
+
+    leftExtra = null,
+    leftColSpan = 0,
+    leftColProps = {},
+
+    tableColSpan = 24,
+    tableColProps = {},
+
+    rightExtra = null,
+    rightColSpan = 0,
+    rightColProps = {},
+  } = contentGrid || {};
   // hooks
   const [expand, setExpand] = useState((formOptionsFormProps.length ?? 0) <= 3);
   const formValue = useRef({ ...formInitialValues });
@@ -182,21 +217,31 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
         </Card>
       ) : null}
       <Fragment>{extra || null}</Fragment>
-      <Card
-        bordered
-        size={tableCardSize}
-        bodyStyle={{
-          ...tableCardBodyStyle,
-          ...(tableCardProps?.bodyStyle || {}),
-        }}
-        headStyle={{
-          ...tableCardHeadStyle,
-          ...(tableCardProps?.headStyle || {}),
-        }}
-        {...tableCardProps}
-      >
-        <Table size={tableSize} {...tableProps} onChange={onTableChange} />
-      </Card>
+      <Row gutter={rowGutter ?? 24} {...rowProps}>
+        <Col span={leftColSpan} {...leftColProps}>
+          {leftExtra}
+        </Col>
+        <Col span={tableColSpan} {...tableColProps}>
+          <Card
+            bordered
+            size={tableCardSize}
+            bodyStyle={{
+              ...tableCardBodyStyle,
+              ...(tableCardProps?.bodyStyle || {}),
+            }}
+            headStyle={{
+              ...tableCardHeadStyle,
+              ...(tableCardProps?.headStyle || {}),
+            }}
+            {...tableCardProps}
+          >
+            <Table size={tableSize} {...tableProps} onChange={onTableChange} />
+          </Card>
+        </Col>
+        <Col span={rightColSpan} {...rightColProps}>
+          {rightExtra}
+        </Col>
+      </Row>
     </div>
   );
 };
