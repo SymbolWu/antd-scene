@@ -55,6 +55,8 @@ export interface IProTable {
   getInitialParams?: (params: { [propsName: string]: any }) => void;
   onChangeParams?: (params: { [propsName: string]: any }) => void;
   onChangeFormParams?: (params: { [propsName: string]: any }) => void;
+  getProTableParams?: (params: { [propsName: string]: any }) => void;
+  getFormParams?: (params: { [propsName: string]: any }) => void;
 }
 
 const defaultPagination = { current: 1, pageSize: 10 };
@@ -73,6 +75,8 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
     getInitialParams,
     onChangeParams,
     onChangeFormParams,
+    getProTableParams,
+    getFormParams,
   },
   ref
 ) => {
@@ -115,6 +119,7 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
   const paginationValue = useRef<TablePaginationConfig>(defaultPagination);
   useImperativeHandle(ref, () => ({
     getParams,
+    onReset,
   }));
   // 样式
   const prefixCls = getPrefixCls("pro-table");
@@ -140,19 +145,22 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
     formValue.current = { ...formInitialValues };
     paginationValue.current = defaultPagination;
     form?.resetFields();
-    getOnChangeParams();
+    onChangeFormParams && onChangeFormParams(formValue.current);
+    getFormParams && getFormParams(formValue.current);
+    getSummaryParams();
   };
   const onSearch = () => {
     paginationValue.current = defaultPagination;
     onChangeFormParams && onChangeFormParams(formValue.current);
-    getOnChangeParams();
+    getFormParams && getFormParams(formValue.current);
+    getSummaryParams();
   };
 
   function onTableChange(pagination: TablePaginationConfig, ...args: any[]) {
     const { current, pageSize } = pagination;
     paginationValue.current = { current, pageSize };
     tableOnChange && tableOnChange(pagination, args[1], args[2], args[3]);
-    getOnChangeParams();
+    getSummaryParams();
   }
   const getParams = () => {
     const originParams = {
@@ -161,10 +169,13 @@ const ProTable: React.ForwardRefRenderFunction<any, IProTable> = (
     };
     return paramsNormalize(originParams, paramsNormalizeMap);
   };
-  const getOnChangeParams = () => {
+  const getSummaryParams = () => {
     const params = getParams();
     if (typeof onChangeParams === "function") {
       onChangeParams(params);
+    }
+    if (typeof getProTableParams === "function") {
+      getProTableParams(params);
     }
   };
 

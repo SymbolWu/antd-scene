@@ -69,7 +69,7 @@ const ApprovalButtonGroup: React.FC<IApprovalButtonGroup> = ({
     reject: "2",
     approving: "3",
   },
-  finishNode = <Text>操作完成</Text>,
+  finishNode = <Text type="secondary">操作完成</Text>,
   onChange,
   status,
   transform = ({ dataSource, status }) => ({ dataSource, status }),
