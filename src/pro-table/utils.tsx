@@ -25,7 +25,7 @@ export const searchFormControl = ({
       wrapperCol: { span: 24 },
       colProps: {
         className: searchFormOperationClassName,
-        span: operationSpan,
+        span: searchOperationsProps?.colProps?.span ?? operationSpan,
       },
       component: (
         <SearchOperations

@@ -1,6 +1,6 @@
 {
   "name": "antd-scene",
-  "version": "1.0.31",
+  "version": "1.0.33",
   "description": "Antd Business Components",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -11,6 +11,7 @@
   "scripts": {
     "build": "rm -rf dist && rollup -c",
     "pub": "yarn build && npm publish",
+    "pub-local": "yarn build && npm publish --registry http://localhost:4873/",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
